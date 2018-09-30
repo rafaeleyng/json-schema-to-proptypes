@@ -1,7 +1,7 @@
 {
   "name": "json-schema-to-proptypes",
   "version": "0.1.0",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": "git@github.com:rafaeleyng/json-schema-to-proptypes.git",
   "author": "Rafael Eyng <rafaeleyng@gmail.com> (https://github.com/rafaeleyng)",
   "license": "MIT",
