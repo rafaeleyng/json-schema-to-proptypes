@@ -1,0 +1,26 @@
+{
+  "name": "json-schema-to-proptypes",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:rafaeleyng/json-schema-to-proptypes.git",
+  "author": "Rafael Eyng <rafaeleyng@gmail.com> (https://github.com/rafaeleyng)",
+  "license": "MIT",
+  "scripts": {
+    "build": "babel src -d lib",
+    "prepublish": "npm run build",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "dependencies": {
+    "ajv": "6.5.4",
+    "lodash.merge": "4.6.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/preset-env": "7.1.0",
+    "babel-core": "^7.0.0-0",
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0"
+  }
+}

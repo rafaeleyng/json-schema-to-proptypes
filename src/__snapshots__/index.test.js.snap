@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`jsonSchemaToPropTypes throws if json schema is not an object 1`] = `"Schema must be of type 'object'"`;
+
+exports[`jsonSchemaToPropTypes throws if json schema's type is not "object" 1`] = `"Schema must define an object type (currently: string)"`;
+
+exports[`jsonSchemaToPropTypes validator error on deep (nested) validation errors 1`] = `[Error: '.a.b' should be string, found {"b":1} instead. Check propTypes of component undefined]`;
+
+exports[`jsonSchemaToPropTypes validator error on deep (nested) validation errors 2`] = `[Error: '.c' should be number, found "dsasd" instead. Check propTypes of component undefined]`;
+
+exports[`jsonSchemaToPropTypes validator respects required properties 1`] = `[Error: '' should have required property 'a', found undefined instead. Check propTypes of component undefined]`;
+
+exports[`jsonSchemaToPropTypes validator respects required properties 2`] = `null`;
+
+exports[`jsonSchemaToPropTypes validator validates correctly based on the property it references 1`] = `[Error: '.id' should be string, found 15 instead. Check propTypes of component undefined]`;
+
+exports[`jsonSchemaToPropTypes validator validates correctly based on the property it references 2`] = `null`;
