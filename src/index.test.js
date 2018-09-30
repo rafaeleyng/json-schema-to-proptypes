@@ -1,110 +1,112 @@
-import jsonSchemaToPropTypes, { SchemaSymbol } from './'
+/* eslint-env jest */
+import jsonSchemaToPropTypes, { SchemaSymbol } from '.'
 
-describe('jsonSchemaToPropTypes', function() {
-  let schema, validators
+describe('jsonSchemaToPropTypes', () => {
+  let schema
+  let validators
 
-  beforeEach(function() {
+  beforeEach(() => {
     schema = {
-      "type" : "object",
-      "description" : "PropTypes for some component",
-      "properties" : {
-        "id" : {
-          "type" : "string"
-        }
-      }
+      type: 'object',
+      description: 'PropTypes for some component',
+      properties: {
+        id: {
+          type: 'string',
+        },
+      },
     }
 
     validators = jsonSchemaToPropTypes(schema)
   })
 
-  it('throws if json schema is not an object', function() {
-    const schema = ""
-    expect(() => jsonSchemaToPropTypes(schema)).toThrowErrorMatchingSnapshot()
+  it('throws if json schema is not an object', () => {
+    const otherSchema = ''
+    expect(() => jsonSchemaToPropTypes(otherSchema)).toThrowErrorMatchingSnapshot()
   })
 
-  it ('throws if json schema\'s type is not "object"', function() {
-    const schema = {
-      type: "string"
+  it('throws if json schema\'s type is not "object"', () => {
+    const otherSchema = {
+      type: 'string',
     }
 
-    expect(() => jsonSchemaToPropTypes(schema)).toThrowErrorMatchingSnapshot()
+    expect(() => jsonSchemaToPropTypes(otherSchema)).toThrowErrorMatchingSnapshot()
   })
 
-  it('creates a proptype validator for each prop', function() {
-    Object.keys(schema.properties).forEach(function(propKey) {
+  it('creates a proptype validator for each prop', () => {
+    Object.keys(schema.properties).forEach((propKey) => {
       expect(validators[propKey]).toBeDefined()
       expect(typeof validators[propKey]).toBe('function')
     })
   })
 
-  it('exposes the schema that it is using to validate', function() {
+  it('exposes the schema that it is using to validate', () => {
     const propTypes = jsonSchemaToPropTypes(schema)
     expect(propTypes[SchemaSymbol]).toEqual(schema)
   })
 
-  it('hides the schema from enumerable properties', function() {
+  it('hides the schema from enumerable properties', () => {
     const propTypes = jsonSchemaToPropTypes(schema)
-    expect(Object.keys(propTypes)).toEqual(["id"])
+    expect(Object.keys(propTypes)).toEqual(['id'])
   })
 
-  it('can take existing proptypes as an argument', function() {
+  it('can take existing proptypes as an argument', () => {
     const newSchema = {
-      [SchemaSymbol]: schema
+      [SchemaSymbol]: schema,
     }
 
     const propTypes = jsonSchemaToPropTypes(newSchema)
-    expect(Object.keys(propTypes)).toEqual(["id"])
+    expect(Object.keys(propTypes)).toEqual(['id'])
   })
 
-  it('deep merges multiple schemas together', function() {
+  it('deep merges multiple schemas together', () => {
     const updates = {
-      "properties" : {
-        "name" : {
-          "type" : "string"
-        }
-      }
+      properties: {
+        name: {
+          type: 'string',
+        },
+      },
     }
 
     const propTypes = jsonSchemaToPropTypes(schema, updates)
-    expect(Object.keys(propTypes)).toEqual(["id", "name"])
+    expect(Object.keys(propTypes)).toEqual(['id', 'name'])
   })
 
-  describe('validator', function() {
-    it('validates correctly based on the property it references', function() {
+  describe('validator', () => {
+    it('validates correctly based on the property it references', () => {
       const propTypes = jsonSchemaToPropTypes(schema)
-      expect(propTypes["id"]({ id: 15 }, "id")).toMatchSnapshot()
-      expect(propTypes["id"]({ id: "hello" }, "id")).toMatchSnapshot()
+      expect(propTypes.id({ id: 15 }, 'id')).toMatchSnapshot()
+      expect(propTypes.id({ id: 'hello' }, 'id')).toMatchSnapshot()
     })
 
-    it('respects required properties', function() {
+    it('respects required properties', () => {
       const propTypes = jsonSchemaToPropTypes({
-        type: "object",
-        required: ["a"],
+        type: 'object',
+        required: ['a'],
         properties: {
-          a: { type: "string" },
-          b: { type: "string" }
-        }
+          a: { type: 'string' },
+          b: { type: 'string' },
+        },
       })
 
-      expect(propTypes.a({}, "a")).toMatchSnapshot()
-      expect(propTypes.b({}, "b")).toMatchSnapshot()
+      expect(propTypes.a({}, 'a')).toMatchSnapshot()
+      expect(propTypes.b({}, 'b')).toMatchSnapshot()
     })
 
-    it('error on deep (nested) validation errors', function() {
+    it('error on deep (nested) validation errors', () => {
       const propTypes = jsonSchemaToPropTypes({
         type: 'object',
         properties: {
           a: {
             type: 'object',
             properties: {
-              b: { type: 'string' }
-            }
+              b: { type: 'string' },
+            },
           },
-          c: { type: 'number' }
-        }
+          c: { type: 'number' },
+        },
       })
-      expect(propTypes.a({a: {b: 1}, c: 1}, 'a')).toMatchSnapshot()
-      expect(propTypes.c({a: {b: '1'}, c: 'dsasd'}, 'c')).toMatchSnapshot()
+      expect(propTypes.a({ a: { b: 1 }, c: 1 }, 'a')).toMatchSnapshot()
+      expect(propTypes.c({ a: { b: '1' }, c: 'dsasd' }, 'c')).toMatchSnapshot()
     })
   })
 })

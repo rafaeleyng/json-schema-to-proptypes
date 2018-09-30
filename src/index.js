@@ -10,7 +10,7 @@ function getSchema(schema) {
   return schema[SchemaSymbol] || schema
 }
 
-export default function(mainSchema, ...otherSchemas) {
+export default (mainSchema, ...otherSchemas) => {
   if (typeof mainSchema !== 'object') {
     throw new TypeError('Schema must be of type \'object\'')
   }
@@ -26,24 +26,22 @@ export default function(mainSchema, ...otherSchemas) {
   if (schema.properties) {
     const validate = ajv.compile(schema)
 
-    for (let prop in schema.properties) {
-      if (schema.properties.hasOwnProperty(prop)) {
-        propTypes[prop] = function(props, propName, componentName) {
-          const valid = validate(props)
+    Object.keys(schema.properties).forEach((prop) => {
+      propTypes[prop] = (props, propName, componentName) => {
+        const valid = validate(props)
 
-          if (valid) {
-            return null
-          }
-
-          const propError = validate.errors.find((e) => new RegExp(`^\.${propName}(\.|$)`).test(e.dataPath) || new RegExp(`^${propName}$`).test(e.params.missingProperty))
-          if (!propError) {
-            return null
-          }
-
-          return new Error(`'${propError.dataPath}' ${propError.message}, found ${JSON.stringify(props[propName])} instead. Check propTypes of component ${componentName}`)
+        if (valid) {
+          return null
         }
+
+        const propError = validate.errors.find(e => new RegExp(`^.${propName}(.|$)`).test(e.dataPath) || new RegExp(`^${propName}$`).test(e.params.missingProperty))
+        if (!propError) {
+          return null
+        }
+
+        return new Error(`'${propError.dataPath}' ${propError.message}, found ${JSON.stringify(props[propName])} instead. Check propTypes of component ${componentName}`)
       }
-    }
+    })
   }
 
   return propTypes
