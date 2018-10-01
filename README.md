@@ -9,8 +9,16 @@ Supports JSON Schema draft-04 schemas conversion to a custom PropType function t
 
 ## Usage
 
+Install with:
+
+```
+npm install json-schema-to-proptypes
+```
+
+Use like:
+
 ```javascript
-import jsonSchemaToPropTypes from './'
+import jsonSchemaToPropTypes from 'json-schema-to-proptypes'
 
 const mySchema = {
   type: 'object',
@@ -22,4 +30,5 @@ const mySchema = {
 }
 
 const myPropTypes = jsonSchemaToPropTypes(mySchema)
+// use myPropTypes however you want, with React etc
 ```
